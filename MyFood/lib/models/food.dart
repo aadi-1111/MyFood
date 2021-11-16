@@ -1,11 +1,11 @@
 import 'package:myfood/net/firestore.dart';
 
 class Food {
-  String name;
-  int count;
-  bool isSaved;
-  String id;
-  String drawerName;
+  late String name;
+  late int count;
+  late bool isSaved;
+  late String id;
+  late String drawerName;
   Food(String name, String drawerName) {
     this.name = name;
     this.count = 1;

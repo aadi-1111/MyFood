@@ -2,7 +2,7 @@ import 'Login.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatefulWidget {
-  Menu({Key key}) : super(key: key);
+  Menu({Key? key}) : super(key: key);
 
   @override
   MenuState createState() => MenuState();

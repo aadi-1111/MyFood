@@ -9,7 +9,7 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  String email = "";
+  late String email = "";
   var _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -47,10 +47,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
                 child: TextFormField(
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value != null && value.isEmpty) {
                       return "Please Enter Your Email";
                     } else {
-                      email = value;
+                      email = value!;
                     }
                     return null;
                   },
@@ -69,14 +69,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide:
-                          BorderSide(width: 2, color: Colors.orange[700]),
+                          BorderSide(width: 2, color: Colors.orange[700]!),
                     ),
                   ),
                 ),
               ),
               RaisedButton(
                   onPressed: () {
-                    if (_formKey.currentState.validate()) {
+                    if (_formKey.currentState != null &&
+                        _formKey.currentState!.validate()) {
                       FirebaseAuth.instance
                           .sendPasswordResetEmail(email: email)
                           .then((value) => print(

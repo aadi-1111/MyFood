@@ -1,9 +1,9 @@
 import 'package:myfood/models/food.dart';
 
 class FridgeContainer {
-  Map<String, int> mapIndex;
-  List<Food> listOfFood;
-  String name;
+  late Map<String, int> mapIndex;
+  late List<Food> listOfFood;
+  late String name;
   FridgeContainer() {
     mapIndex = new Map<String, int>();
     name = "default";
@@ -14,8 +14,8 @@ class FridgeContainer {
   }
   void add(String food) {
     if (mapIndex.containsKey(food)) {
-      listOfFood[mapIndex[food]].increaseCount();
-      listOfFood[mapIndex[food]].save();
+      listOfFood[mapIndex[food]!].increaseCount();
+      listOfFood[mapIndex[food]!].save();
     } else {
       mapIndex[food] = this.getSize();
       listOfFood.add(new Food(food, this.name));

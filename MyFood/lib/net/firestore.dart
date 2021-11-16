@@ -6,7 +6,7 @@ Future<void> userCreate(String email) async {
       FirebaseFirestore.instance.collection('Users'); //create user collection
 
   FirebaseAuth authenticate = FirebaseAuth.instance;
-  String uid = authenticate.currentUser.uid
+  String? uid = authenticate.currentUser?.uid
       .toString(); //gets current registered users ID for collection
 
   user.doc(uid).set({
@@ -39,7 +39,7 @@ void updateDoc(String col, String id, dynamic docVal) {
 Future<String> addDocToUser(String col, dynamic docVal) async {
   CollectionReference user = FirebaseFirestore.instance.collection('Users');
   FirebaseAuth authenticate = FirebaseAuth.instance;
-  String uid = authenticate.currentUser.uid
+  String? uid = authenticate.currentUser?.uid
       .toString(); //gets current registered users ID for collection
 
   CollectionReference collection = user.doc(uid).collection(col);
@@ -55,7 +55,7 @@ Future<String> addDocToUser(String col, dynamic docVal) async {
 void updateDocToUser(String col, String id, dynamic docVal) {
   CollectionReference user = FirebaseFirestore.instance.collection('Users');
   FirebaseAuth authenticate = FirebaseAuth.instance;
-  String uid = authenticate.currentUser.uid
+  String? uid = authenticate.currentUser?.uid
       .toString(); //gets current registered users ID for collection
   CollectionReference collection = user.doc(uid).collection(col);
   collection

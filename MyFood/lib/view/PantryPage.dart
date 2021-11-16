@@ -5,14 +5,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class PantryPage extends StatefulWidget {
-  PantryPage({Key key}) : super(key: key);
+  PantryPage({Key? key}) : super(key: key);
 
   @override
   _PantryPageState createState() => _PantryPageState();
 }
 
 class _PantryPageState extends State<PantryPage> {
-  DateTime _dateTime;
+  late DateTime _dateTime;
 
   //FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -23,8 +23,8 @@ class _PantryPageState extends State<PantryPage> {
 
   Future getPosts() async {
     var db = FirebaseFirestore.instance;
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
 
     QuerySnapshot qn = await db
         .collection("Users")
@@ -39,8 +39,8 @@ class _PantryPageState extends State<PantryPage> {
 //Function that is called when a new item is submitted.
 //Submits the new food item from the text controller to the current user and setting its type to freezer
   onSubmit(String name, String amount, DateTime expdate) {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
     // print(date);
     setState(() {
       FirebaseFirestore.instance
@@ -60,8 +60,8 @@ class _PantryPageState extends State<PantryPage> {
 //Function that is called when submitting a new amount for a food item.
 //Sets the new amount of the current item for the current user to what is in the amount text field
   changeAmount(String item) {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
     setState(() {
       FirebaseFirestore.instance
           .collection("Users")
@@ -75,8 +75,8 @@ class _PantryPageState extends State<PantryPage> {
 
 //Deletes the current food item
   deleteItem(String item) {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
     setState(() {
       FirebaseFirestore.instance
           .collection("Users")
@@ -218,7 +218,7 @@ class _PantryPageState extends State<PantryPage> {
                                                 lastDate: DateTime(2100))
                                             .then((expdate) {
                                           setState(() {
-                                            _dateTime = expdate;
+                                            _dateTime = expdate!;
                                           });
                                         });
                                       },
@@ -316,6 +316,8 @@ class _PantryPageState extends State<PantryPage> {
                           child: FutureBuilder(
                             future: getPosts(),
                             builder: (_, snapshot) {
+                              List<DocumentSnapshot> data =
+                                  snapshot.data as List<DocumentSnapshot>;
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
                                 return Center(
@@ -323,9 +325,7 @@ class _PantryPageState extends State<PantryPage> {
                                 );
                               } else {
                                 return ListView.builder(
-                                    itemCount: snapshot.hasData
-                                        ? snapshot.data.legth
-                                        : 0,
+                                    itemCount: data.length,
                                     itemBuilder: (_, index) {
                                       //When an item is clicked, a dialog box to change the amount of that item or to delete the item appears
                                       return InkWell(
@@ -333,9 +333,8 @@ class _PantryPageState extends State<PantryPage> {
                                               context: context,
                                               builder: (context) {
                                                 return AlertDialog(
-                                                  title: Text(snapshot
-                                                      .data[index]
-                                                      .get("Name")),
+                                                  title: Text(
+                                                      data[index].get("Name")),
                                                   content:
                                                       SingleChildScrollView(
                                                           child: ListBody(
@@ -370,15 +369,13 @@ class _PantryPageState extends State<PantryPage> {
                                                         ),
                                                       ])),
                                                   actions: <Widget>[
-                                                    Text(snapshot.data[index]
-                                                                .get(
-                                                                    "ExpDate") ==
+                                                    Text(data[index].get(
+                                                                "ExpDate") ==
                                                             null
                                                         ? 'No expiration date'
                                                         : DateFormat(
                                                                 'MM/dd/yyyy')
-                                                            .format(snapshot
-                                                                .data[index]
+                                                            .format(data[index]
                                                                 .get("ExpDate")
                                                                 .toDate())
                                                             .toString()),
@@ -386,8 +383,7 @@ class _PantryPageState extends State<PantryPage> {
                                                     //Submit Button
                                                     InkWell(
                                                       onTap: () {
-                                                        changeAmount(snapshot
-                                                            .data[index]
+                                                        changeAmount(data[index]
                                                             .get("Name"));
                                                         Navigator.of(context)
                                                             .pop();
@@ -423,8 +419,7 @@ class _PantryPageState extends State<PantryPage> {
                                                     //Cancel Button
                                                     InkWell(
                                                       onTap: () {
-                                                        deleteItem(snapshot
-                                                            .data[index]
+                                                        deleteItem(data[index]
                                                             .get("Name"));
                                                         Navigator.of(context)
                                                             .pop();
@@ -466,12 +461,11 @@ class _PantryPageState extends State<PantryPage> {
                                                   color: Colors.white,
                                                   child: ListTile(
                                                     title: Text(
-                                                      snapshot.data[index]
-                                                          .get("Name"),
+                                                      data[index].get("Name"),
                                                       textAlign: TextAlign.left,
                                                     ),
                                                     trailing: Text(
-                                                      snapshot.data[index]
+                                                      data[index]
                                                           .get("Amount")
                                                           .toString(),
                                                       textAlign: TextAlign.left,

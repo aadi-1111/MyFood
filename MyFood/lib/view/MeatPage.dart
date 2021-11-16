@@ -6,14 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class MeatPage extends StatefulWidget {
-  MeatPage({Key key}) : super(key: key);
+  MeatPage({Key? key}) : super(key: key);
 
   @override
   _MeatPageState createState() => _MeatPageState();
 }
 
 class _MeatPageState extends State<MeatPage> {
-  DateTime _dateTime;
+  late DateTime _dateTime;
 
 //Initialize the database, text controller for food item, and amount controller for food item
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -23,8 +23,8 @@ class _MeatPageState extends State<MeatPage> {
 //Ask for all of the food items from the current user
   Future getPosts() async {
     var db = FirebaseFirestore.instance;
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
 
     QuerySnapshot qn = await db
         .collection("Users")
@@ -39,8 +39,8 @@ class _MeatPageState extends State<MeatPage> {
 //Function that is called when a new item is submitted.
 //Submits the new food item from the text controller to the current user and setting its type to meat
   onSubmit(String name, String amount, DateTime expdate) {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
     // print(date);
     setState(() {
       FirebaseFirestore.instance
@@ -60,8 +60,8 @@ class _MeatPageState extends State<MeatPage> {
 //Function that is called when submitting a new amount for a food item.
 //Sets the new amount of the current item for the current user to what is in the amount text field
   changeAmount(String item) {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
     setState(() {
       FirebaseFirestore.instance
           .collection("Users")
@@ -75,8 +75,8 @@ class _MeatPageState extends State<MeatPage> {
 
 //Deletes the current food item
   deleteItem(String item) {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
     setState(() {
       FirebaseFirestore.instance
           .collection("Users")
@@ -218,7 +218,7 @@ class _MeatPageState extends State<MeatPage> {
                                                 lastDate: DateTime(2100))
                                             .then((expdate) {
                                           setState(() {
-                                            _dateTime = expdate;
+                                            _dateTime = expdate!;
                                           });
                                         });
                                       },
@@ -316,6 +316,10 @@ class _MeatPageState extends State<MeatPage> {
                           child: FutureBuilder(
                             future: getPosts(),
                             builder: (_, snapshot) {
+                              List<DocumentSnapshot>? data;
+                              if (snapshot.hasData) {
+                                data = snapshot.data as List<DocumentSnapshot>;
+                              }
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
                                 return Center(
@@ -323,9 +327,7 @@ class _MeatPageState extends State<MeatPage> {
                                 );
                               } else {
                                 return ListView.builder(
-                                    itemCount: snapshot.hasData
-                                        ? snapshot.data.legth
-                                        : 0,
+                                    itemCount: data?.length,
                                     itemBuilder: (_, index) {
                                       //When an item is clicked, a dialog box to change the amount of that item or to delete the item appears
                                       return InkWell(
@@ -333,9 +335,8 @@ class _MeatPageState extends State<MeatPage> {
                                               context: context,
                                               builder: (context) {
                                                 return AlertDialog(
-                                                  title: Text(snapshot
-                                                      .data[index]
-                                                      .get("Name")),
+                                                  title: Text(
+                                                      data![index].get("Name")),
                                                   content:
                                                       SingleChildScrollView(
                                                           child: ListBody(
@@ -370,15 +371,13 @@ class _MeatPageState extends State<MeatPage> {
                                                         ),
                                                       ])),
                                                   actions: <Widget>[
-                                                    Text(snapshot.data[index]
-                                                                .get(
-                                                                    "ExpDate") ==
+                                                    Text(data[index].get(
+                                                                "ExpDate") ==
                                                             null
                                                         ? 'No expiration date'
                                                         : DateFormat(
                                                                 'MM/dd/yyyy')
-                                                            .format(snapshot
-                                                                .data[index]
+                                                            .format(data[index]
                                                                 .get("ExpDate")
                                                                 .toDate())
                                                             .toString()),
@@ -386,9 +385,9 @@ class _MeatPageState extends State<MeatPage> {
                                                     //Submit Button
                                                     InkWell(
                                                       onTap: () {
-                                                        changeAmount(snapshot
-                                                            .data[index]
-                                                            .get("Name"));
+                                                        changeAmount(
+                                                            data![index]
+                                                                .get("Name"));
                                                         Navigator.of(context)
                                                             .pop();
                                                       },
@@ -423,8 +422,7 @@ class _MeatPageState extends State<MeatPage> {
                                                     //Cancel Button
                                                     InkWell(
                                                       onTap: () {
-                                                        deleteItem(snapshot
-                                                            .data[index]
+                                                        deleteItem(data![index]
                                                             .get("Name"));
                                                         Navigator.of(context)
                                                             .pop();
@@ -466,12 +464,11 @@ class _MeatPageState extends State<MeatPage> {
                                                   color: Colors.white,
                                                   child: ListTile(
                                                     title: Text(
-                                                      snapshot.data[index]
-                                                          .get("Name"),
+                                                      data![index].get("Name"),
                                                       textAlign: TextAlign.left,
                                                     ),
                                                     trailing: Text(
-                                                      snapshot.data[index]
+                                                      data[index]
                                                           .get("Amount")
                                                           .toString(),
                                                       textAlign: TextAlign.left,

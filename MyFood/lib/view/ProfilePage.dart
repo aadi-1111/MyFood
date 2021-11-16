@@ -6,9 +6,11 @@ import 'package:myfood/view/MainPage.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'dart:async';
 import 'Login.dart';
+import 'CameraPage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key key}) : super(key: key);
+  ProfilePage({Key? key}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -27,8 +29,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future getDiet() async {
     var db = FirebaseFirestore.instance;
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
 
     QuerySnapshot qn =
         await db.collection("Users").doc(uid).collection("Diets").get();
@@ -37,8 +39,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   dietErase() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
 
     FirebaseFirestore.instance
         .collection("Users")
@@ -53,8 +55,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   allergyErase() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
 
     FirebaseFirestore.instance
         .collection("Users")
@@ -69,8 +71,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   allergySubmit(List<String> allergies) {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
 
     for (int i = 0; i <= allergies.length; i++) {
       setState(() {
@@ -85,8 +87,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   dietSubmit(List<String> diets) {
-    final User user = auth.currentUser;
-    final uid = user.uid;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
 
     for (int i = 0; i <= diets.length; i++) {
       setState(() {
@@ -143,184 +145,210 @@ class _ProfilePageState extends State<ProfilePage> {
     double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         backgroundColor: Color(0xffe0f7f3),
-        body: SingleChildScrollView(
-            child: Column(children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              //Back button
-              InkWell(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MainPage())),
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.black,
-                          border: Border.all(width: 3),
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      margin: EdgeInsets.only(
-                          left: deviceWidth * .05, top: deviceHeight * .02),
-                      width: deviceWidth * .15,
-                      height: deviceHeight * .045,
-                      child: Center(
-                        child: Text(
-                          "Back",
-                          textAlign: TextAlign.center,
-                          style: new TextStyle(
-                              fontSize: deviceWidth * .03,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ))),
-            ],
-          ),
-          //User Button
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: Image.asset('assets/images/user.png'),
-                iconSize: deviceHeight * .28,
-                onPressed: () {
-                  print("does something");
-                },
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Your Diet",
-                style: TextStyle(
-                    fontSize: deviceHeight * .05, fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                  //color: Colors.red,
-                  width: deviceWidth * .8,
-                  //constraints: BoxConstraints(),
-                  //alignment: Alignment.center,
-                  child: MultiSelectDialogField(
-                      title: Text(
-                        "Diets",
-                      ),
-                      height: deviceHeight * .6,
-                      items: _dietList,
-                      buttonText: Text(
-                        "Select Diets That Apply to You",
-                      ),
-                      buttonIcon: Icon(Icons.dinner_dining),
-                      cancelText: Text("Cancel"),
-                      //We need to load in the users current diet from the databse so that the database and front end are synced
-                      //Same applies for the allergies section
-                      //initialValue:
-                      confirmText: Text("OK"),
-                      decoration: BoxDecoration(
-                          border: Border(
-                        bottom: BorderSide(
+        body: SafeArea(
+          child: SingleChildScrollView(
+              child: Column(children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                //Back button
+                InkWell(
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MainPage())),
+                    child: Container(
+                        decoration: BoxDecoration(
                             color: Colors.black,
-                            width: 5,
-                            style: BorderStyle.solid),
-                      )),
-                      searchable: true,
-                      searchHint: "Search for your specific diet",
-                      selectedColor: Colors.green[800],
-                      onConfirm: (results) {
-                        dietErase();
-                        dietSubmitWithSleep(results);
-                      }))
-            ],
-          ),
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.only(bottom: deviceHeight * .02),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Allergies",
-                style: TextStyle(
-                    fontSize: deviceHeight * .05, fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                  //color: Colors.red,
-                  width: deviceWidth * .8,
-                  //constraints: BoxConstraints(),
-                  //alignment: Alignment.center,
-                  child: MultiSelectDialogField(
-                      title: Text(
-                        "Allergies",
-                      ),
-                      height: deviceHeight * .6,
-                      items: _allergyList,
-                      buttonText: Text(
-                        "Select Allergies That Apply to You",
-                      ),
-                      buttonIcon: Icon(Icons.local_dining),
-                      cancelText: Text("Cancel"),
-                      confirmText: Text("OK"),
-                      //initialValue: _allergies,
-                      decoration: BoxDecoration(
-                          border: Border(
-                        bottom: BorderSide(
-                            color: Colors.black,
-                            width: 5,
-                            style: BorderStyle.solid),
-                      )),
-                      searchable: true,
-                      searchHint: "Search for your allergies",
-                      selectedColor: Colors.green[800],
-                      onConfirm: (results) {
-                        allergyErase();
-                        allergySubmitWithSleep(results);
-                      }))
-            ],
-          ),
-          Row(
-            children: [
-              Container(
-                  margin: EdgeInsets.only(
-                      bottom: deviceHeight * 0, left: deviceWidth * 0.062),
-                  width: deviceWidth * .9,
-                  height: deviceHeight * .2,
-                  child: FutureBuilder(
-                      future: getDiet(),
-                      builder: (_, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                            child: Text("Loading..."),
-                          );
-                        } else {
-                          return ListView.builder(
-                              itemCount:
-                                  snapshot.hasData ? snapshot.data.legth : 0,
-                              itemBuilder: (_, index) {
-                                return Text(snapshot.data[index].get("Name"));
-                              });
+                            border: Border.all(width: 3),
+                            borderRadius: BorderRadius.all(Radius.circular(10))),
+                        margin: EdgeInsets.only(
+                            left: deviceWidth * .05, top: deviceHeight * .02),
+                        width: deviceWidth * .15,
+                        height: deviceHeight * .045,
+                        child: Center(
+                          child: Text(
+                            "Back",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(
+                                fontSize: deviceWidth * .03,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ))),
+              ],
+            ),
+            //User Button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: FutureBuilder(
+                    future: getProfilePic(),
+                    builder: (context,snapshot){
+                      if(snapshot.hasData){
+                        if(snapshot.data == null){
+                          return CircleAvatar(maxRadius: 100,backgroundImage: AssetImage('assets/images/user.png'),);
                         }
-                      }))
-            ],
-          ),
-              ElevatedButton(
-                  onPressed: (){
-                    auth.signOut();
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (e) => false);
+                        return CircleAvatar(maxRadius: 100,backgroundImage: NetworkImage(snapshot.data.toString()),);
+                      }
+                      else{
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  ),
+                  iconSize: deviceHeight * .28,
+                  onPressed: () {
+                    CameraSetup.runCamera(context);
                   },
-                  child: Text("Logout"))
-        ])));
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Your Diet",
+                  style: TextStyle(
+                      fontSize: deviceHeight * .05, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                    //color: Colors.red,
+                    width: deviceWidth * .8,
+                    //constraints: BoxConstraints(),
+                    //alignment: Alignment.center,
+                    child: MultiSelectDialogField(
+                        title: Text(
+                          "Diets",
+                        ),
+                        height: deviceHeight * .6,
+                        items: _dietList,
+                        buttonText: Text(
+                          "Select Diets That Apply to You",
+                        ),
+                        buttonIcon: Icon(Icons.dinner_dining),
+                        cancelText: Text("Cancel"),
+                        //We need to load in the users current diet from the databse so that the database and front end are synced
+                        //Same applies for the allergies section
+                        //initialValue:
+                        confirmText: Text("OK"),
+                        decoration: BoxDecoration(
+                            border: Border(
+                          bottom: BorderSide(
+                              color: Colors.black,
+                              width: 5,
+                              style: BorderStyle.solid),
+                        )),
+                        searchable: true,
+                        searchHint: "Search for your specific diet",
+                        selectedColor: Colors.green[800],
+                        onConfirm: (results) {
+                          dietErase();
+                          dietSubmitWithSleep(results);
+                        }))
+              ],
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(bottom: deviceHeight * .02),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Allergies",
+                  style: TextStyle(
+                      fontSize: deviceHeight * .05, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                    //color: Colors.red,
+                    width: deviceWidth * .8,
+                    //constraints: BoxConstraints(),
+                    //alignment: Alignment.center,
+                    child: MultiSelectDialogField(
+                        title: Text(
+                          "Allergies",
+                        ),
+                        height: deviceHeight * .6,
+                        items: _allergyList,
+                        buttonText: Text(
+                          "Select Allergies That Apply to You",
+                        ),
+                        buttonIcon: Icon(Icons.local_dining),
+                        cancelText: Text("Cancel"),
+                        confirmText: Text("OK"),
+                        //initialValue: _allergies,
+                        decoration: BoxDecoration(
+                            border: Border(
+                          bottom: BorderSide(
+                              color: Colors.black,
+                              width: 5,
+                              style: BorderStyle.solid),
+                        )),
+                        searchable: true,
+                        searchHint: "Search for your allergies",
+                        selectedColor: Colors.green[800],
+                        onConfirm: (results) {
+                          allergyErase();
+                          allergySubmitWithSleep(results);
+                        }))
+              ],
+            ),
+            Row(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(
+                        bottom: deviceHeight * 0, left: deviceWidth * 0.062),
+                    width: deviceWidth * .9,
+                    height: deviceHeight * .2,
+                    child: FutureBuilder(
+                        future: getDiet(),
+                        builder: (_, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                              child: Text("Loading..."),
+                            );
+                          } else {
+                            List<DocumentSnapshot> data =
+                            snapshot.data as List<DocumentSnapshot>;
+                            return ListView.builder(
+                                itemCount: data.length,
+                                itemBuilder: (_, index) {
+                                  return Text(data[index].get("Name"));
+                                });
+                          }
+                        }))
+              ],
+            ),
+                ElevatedButton(
+                    onPressed: (){
+                      auth.signOut();
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (e) => false);
+                    },
+                    child: Text("Logout"))
+          ])),
+        ));
   }
+}
+
+Future<String> getProfilePic() async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String downloadURL = await firebase_storage.FirebaseStorage.instance
+      .ref('profilePics/' + auth.currentUser!.uid)
+      .getDownloadURL();
+  return downloadURL;
+  // Within your widgets:
+  // Image.network(downloadURL);
 }

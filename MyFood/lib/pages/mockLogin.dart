@@ -38,7 +38,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                            BorderSide(width: 2, color: Colors.orange[700]),
+                            BorderSide(width: 2, color: (Colors.orange[700])!),
                       ),
                     ))),
             Container(
@@ -58,7 +58,7 @@ class LoginScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5.0)),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                            BorderSide(width: 2, color: Colors.orange[700]),
+                            BorderSide(width: 2, color: (Colors.orange[700])!),
                       ),
                     ))),
             SizedBox(height: 45.0),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AddItem extends StatefulWidget {
   AddItem({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -154,7 +154,7 @@ class AddItemState extends State<AddItem> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                            BorderSide(width: 2, color: Colors.orange[700]),
+                            BorderSide(width: 2, color: (Colors.orange[700])!),
                       ),
                     ),
                   ),
@@ -177,7 +177,7 @@ class AddItemState extends State<AddItem> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                            BorderSide(width: 2, color: Colors.orange[700]),
+                            BorderSide(width: 2, color: (Colors.orange[700])!),
                       ),
                     ),
                   ),
