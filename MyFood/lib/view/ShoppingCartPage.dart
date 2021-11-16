@@ -1,96 +1,35 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myfood/view/dbhelper.dart';
-
-void main() => runApp(ShoppingCartPage());
+import 'package:myfood/view//dbhelper.dart';
 
 class ShoppingCartPage extends StatefulWidget {
+  const ShoppingCartPage({Key? key}) : super(key: key);
+
   @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "ShoppingList",
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark().copyWith(
+        accentColor: Colors.teal[50],
+      ),
+      home: const ShoppingCartPage(),
+    );
+  }
   _ShoppingCartPageState createState() => _ShoppingCartPageState();
 }
 
 class _ShoppingCartPageState extends State<ShoppingCartPage> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Items",
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-        accentColor: Colors.purple,
-      ),
-      home: itemsadded(),
-    );
-  }
-}
-
-class itemsadded extends StatefulWidget {
-  @override
-  _itemsaddedState createState() => _itemsaddedState();
-}
-
-class _itemsaddedState extends State<itemsadded> {
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-
-  }
-  final dbhelper = Databasehelper.instance;
-
-  final texteditingcontroller = TextEditingController();
+  final textEditingController = TextEditingController();
   bool validated = true;
-  String errtext = "";
-  String itemsedited = "";
-  var myitems = [];
-  List<Widget> children = <Widget>[];
+  String errorText = "";
+  String todoEdited = "";
 
-  void additems() async {
-    Map<String, dynamic> row = {
-      Databasehelper.columnName: itemsedited,
-    };
-    final id = await dbhelper.insert(row);
-    print(id);
-    Navigator.pop(context);
-    itemsedited = "";
-    setState(() {
-      errtext = "";
-    });
-  }
+  User? user = FirebaseAuth.instance.currentUser;
 
-  Future<bool> query() async {
-    myitems = [];
-    children = [];
-    var allrows = await dbhelper.queryall();
-    allrows.forEach((row) {
-      myitems.add(row.toString());
-      children.add(Card(
-        elevation: 5.0,
-        margin: EdgeInsets.symmetric(
-          horizontal: 10.0,
-          vertical: 5.0,
-        ),
-        child: Container(
-          padding: EdgeInsets.all(5.0),
-          child: ListTile(
-            title: Text(
-              row['todo'],
-              style: TextStyle(
-                fontSize: 18.0,
-                fontFamily: "Raleway",
-              ),
-            ),
-            onLongPress: () {
-              dbhelper.deletedata(row['id']);
-              setState(() {});
-            },
-          ),
-        ),
-      ));
-    });
-    return Future.value(true);
-  }
-
-  void showalertdialog() {
-    texteditingcontroller.text = "";
+  void showAlertDialog() {
+    textEditingController.text = "";
     showDialog(
         context: context,
         builder: (context) {
@@ -99,28 +38,28 @@ class _itemsaddedState extends State<itemsadded> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              title: Text(
-                "Add Items",
+              title: const Text(
+                "Add Task",
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   TextField(
-                    controller: texteditingcontroller,
+                    controller: textEditingController,
                     autofocus: true,
                     onChanged: (_val) {
-                      itemsedited = _val;
+                      todoEdited = _val;
                     },
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18.0,
                       fontFamily: "Raleway",
                     ),
                     decoration: InputDecoration(
-                      errorText: validated ? null : errtext,
+                      errorText: validated ? null : errorText,
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       top: 10.0,
                     ),
                     child: Row(
@@ -128,22 +67,30 @@ class _itemsaddedState extends State<itemsadded> {
                       children: <Widget>[
                         RaisedButton(
                           onPressed: () {
-                            if (texteditingcontroller.text.isEmpty) {
+                            if (textEditingController.text.isEmpty) {
                               setState(() {
-                                errtext = "Can't Be Empty";
+                                errorText = "Can't Be Empty";
+                                validated = false;
                               });
-                            } else if (texteditingcontroller.text.length >
+                            } else if (textEditingController.text.length >
                                 512) {
                               setState(() {
-                                errtext = "Too may Characters";
+                                errorText = "Too may Characters";
+                                validated = false;
                               });
                             } else {
-                              additems();
+                              DatabaseHelper()
+                                  .createNewTask(textEditingController.text, user?.uid);
+                              Navigator.of(context).pop();
                             }
                           },
-                          color: Colors.blue,
-                          child: Text("Add",
-                              style: TextStyle(fontSize: 18.0, fontFamily: "Raleway",)
+                          color: Colors.teal[50],
+                          child: const Text(
+                            "Add",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontFamily: "Raleway",
+                            ),
                           ),
                         )
                       ],
@@ -158,70 +105,98 @@ class _itemsaddedState extends State<itemsadded> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      builder: (context, snap) {
-        if (snap.hasData == null) {
-          return Center(
-            child: Text(
-              "No Data",
-            ),
-          );
-        } else {
-          if (myitems.length == 0) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection("Users")
+            .doc(user?.uid)
+            .collection("ShoppingList")
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.data.toString() == 'null') {
             return Scaffold(
               floatingActionButton: FloatingActionButton(
-                onPressed: showalertdialog,
-                child: Icon(
+                onPressed: showAlertDialog,
+                child: const Icon(
                   Icons.add,
                   color: Colors.white,
                 ),
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.teal[50],
               ),
               appBar: AppBar(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.teal[50],
                 centerTitle: true,
-                title: Text(
-                  "Shopping Cart",
-                  style: TextStyle(fontFamily: "Raleway", fontWeight: FontWeight.bold, color: Colors.black,),
+                title: const Text(
+                  "Shopping List",
+                  style: TextStyle(
+                    fontFamily: "Raleway",
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               backgroundColor: Colors.white,
-              body: Center(
+              body: const Center(
                 child: Text(
-                  "No Food Available",
-                  style: TextStyle(fontFamily: "Raleway", fontSize: 20.0, color: Colors.black),
-                ),
-              ),
-            );
-          } else {
-            return Scaffold(
-              floatingActionButton: FloatingActionButton(
-                onPressed: showalertdialog,
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-                backgroundColor: Colors.blue,
-              ),
-              appBar: AppBar(
-                backgroundColor: Colors.blue,
-                centerTitle: true,
-                title: Text(
-                  "Shopping Cart",
-                  style: TextStyle(fontFamily: "Raleway", fontWeight: FontWeight.bold, color: Colors.black,),
-                ),
-              ),
-              backgroundColor: Colors.white,
-              body: SingleChildScrollView(
-                child: Column(
-                  children: children,
+                  "No Task Available",
+                  style: TextStyle(fontFamily: "Raleway", fontSize: 20.0),
                 ),
               ),
             );
           }
-        }
-      },
-      future: query(),
-    );
+
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.teal[50],
+              centerTitle: true,
+              title: const Text(
+                "Shopping List",
+                style: TextStyle(
+                  fontFamily: "Raleway",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            backgroundColor: Colors.white,
+            body: ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot todo = snapshot.data!.docs[index];
+                  return Card(
+                    elevation: 5.0,
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 5.0,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(5.0),
+                      child: ListTile(
+                        title: Text(
+                          todo["Food Item"],
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                            fontFamily: "Raleway",
+                          ),
+                        ),
+                        onLongPress: () {
+                          FirebaseFirestore.instance
+                              .collection('ShoppingList')
+                              .doc(todo.id)
+                              .delete();
+                        },
+                      ),
+                    ),
+                  );
+                }),
+            floatingActionButton: FloatingActionButton(
+              onPressed: showAlertDialog,
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              backgroundColor: Colors.teal[50],
+            ),
+          );
+        });
   }
 }
