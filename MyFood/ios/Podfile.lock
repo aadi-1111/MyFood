@@ -83,8 +83,45 @@ PODS:
   - abseil/base/throw_delegate (0.20200225.0):
     - abseil/base/config
     - abseil/base/raw_logging_internal
+  - abseil/container/common (0.20200225.0):
+    - abseil/meta/type_traits
+    - abseil/types/optional
   - abseil/container/compressed_tuple (0.20200225.0):
     - abseil/utility/utility
+  - abseil/container/container_memory (0.20200225.0):
+    - abseil/memory/memory
+    - abseil/utility/utility
+  - abseil/container/fixed_array (0.20200225.0):
+    - abseil/algorithm/algorithm
+    - abseil/base/core_headers
+    - abseil/base/dynamic_annotations
+    - abseil/base/throw_delegate
+    - abseil/container/compressed_tuple
+    - abseil/memory/memory
+  - abseil/container/flat_hash_map (0.20200225.0):
+    - abseil/algorithm/container
+    - abseil/container/container_memory
+    - abseil/container/hash_function_defaults
+    - abseil/container/raw_hash_map
+    - abseil/memory/memory
+  - abseil/container/hash_function_defaults (0.20200225.0):
+    - abseil/base/config
+    - abseil/hash/hash
+    - abseil/strings/strings
+  - abseil/container/hash_policy_traits (0.20200225.0):
+    - abseil/meta/type_traits
+  - abseil/container/hashtable_debug_hooks (0.20200225.0):
+    - abseil/base/config
+  - abseil/container/hashtablez_sampler (0.20200225.0):
+    - abseil/base/base
+    - abseil/base/core_headers
+    - abseil/base/exponential_biased
+    - abseil/container/have_sse
+    - abseil/debugging/stacktrace
+    - abseil/memory/memory
+    - abseil/synchronization/synchronization
+    - abseil/utility/utility
+  - abseil/container/have_sse (0.20200225.0)
   - abseil/container/inlined_vector (0.20200225.0):
     - abseil/algorithm/algorithm
     - abseil/base/core_headers
@@ -97,6 +134,70 @@ PODS:
     - abseil/memory/memory
     - abseil/meta/type_traits
     - abseil/types/span
+  - abseil/container/layout (0.20200225.0):
+    - abseil/base/core_headers
+    - abseil/meta/type_traits
+    - abseil/strings/strings
+    - abseil/types/span
+    - abseil/utility/utility
+  - abseil/container/raw_hash_map (0.20200225.0):
+    - abseil/base/throw_delegate
+    - abseil/container/container_memory
+    - abseil/container/raw_hash_set
+  - abseil/container/raw_hash_set (0.20200225.0):
+    - abseil/base/bits
+    - abseil/base/config
+    - abseil/base/core_headers
+    - abseil/base/endian
+    - abseil/container/common
+    - abseil/container/compressed_tuple
+    - abseil/container/container_memory
+    - abseil/container/hash_policy_traits
+    - abseil/container/hashtable_debug_hooks
+    - abseil/container/hashtablez_sampler
+    - abseil/container/have_sse
+    - abseil/container/layout
+    - abseil/memory/memory
+    - abseil/meta/type_traits
+    - abseil/utility/utility
+  - abseil/debugging/debugging_internal (0.20200225.0):
+    - abseil/base/config
+    - abseil/base/core_headers
+    - abseil/base/dynamic_annotations
+    - abseil/base/errno_saver
+    - abseil/base/raw_logging_internal
+  - abseil/debugging/demangle_internal (0.20200225.0):
+    - abseil/base/base
+    - abseil/base/config
+    - abseil/base/core_headers
+  - abseil/debugging/stacktrace (0.20200225.0):
+    - abseil/base/config
+    - abseil/base/core_headers
+    - abseil/debugging/debugging_internal
+  - abseil/debugging/symbolize (0.20200225.0):
+    - abseil/base/base
+    - abseil/base/config
+    - abseil/base/core_headers
+    - abseil/base/dynamic_annotations
+    - abseil/base/malloc_internal
+    - abseil/base/raw_logging_internal
+    - abseil/debugging/debugging_internal
+    - abseil/debugging/demangle_internal
+  - abseil/hash/city (0.20200225.0):
+    - abseil/base/config
+    - abseil/base/core_headers
+    - abseil/base/endian
+  - abseil/hash/hash (0.20200225.0):
+    - abseil/base/core_headers
+    - abseil/base/endian
+    - abseil/container/fixed_array
+    - abseil/hash/city
+    - abseil/meta/type_traits
+    - abseil/numeric/int128
+    - abseil/strings/strings
+    - abseil/types/optional
+    - abseil/types/variant
+    - abseil/utility/utility
   - abseil/memory (0.20200225.0):
     - abseil/memory/memory (= 0.20200225.0)
   - abseil/memory/memory (0.20200225.0):
@@ -136,6 +237,31 @@ PODS:
     - abseil/meta/type_traits
     - abseil/numeric/int128
     - abseil/strings/internal
+  - abseil/synchronization/graphcycles_internal (0.20200225.0):
+    - abseil/base/base
+    - abseil/base/base_internal
+    - abseil/base/config
+    - abseil/base/core_headers
+    - abseil/base/malloc_internal
+    - abseil/base/raw_logging_internal
+  - abseil/synchronization/kernel_timeout_internal (0.20200225.0):
+    - abseil/base/core_headers
+    - abseil/base/raw_logging_internal
+    - abseil/time/time
+  - abseil/synchronization/synchronization (0.20200225.0):
+    - abseil/base/atomic_hook
+    - abseil/base/base
+    - abseil/base/base_internal
+    - abseil/base/config
+    - abseil/base/core_headers
+    - abseil/base/dynamic_annotations
+    - abseil/base/malloc_internal
+    - abseil/base/raw_logging_internal
+    - abseil/debugging/stacktrace
+    - abseil/debugging/symbolize
+    - abseil/synchronization/graphcycles_internal
+    - abseil/synchronization/kernel_timeout_internal
+    - abseil/time/time
   - abseil/time (0.20200225.0):
     - abseil/time/internal (= 0.20200225.0)
     - abseil/time/time (= 0.20200225.0)
@@ -212,87 +338,105 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - barcode_scan2 (0.0.1):
+    - Flutter
+    - MTBBarcodeScanner
+    - SwiftProtobuf
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Implementation (0.0.7):
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Interface (0.0.7)
-  - cloud_firestore (0.14.1-2):
-    - Firebase/CoreOnly (~> 6.33.0)
-    - Firebase/Firestore (~> 6.33.0)
+  - camera (0.0.1):
+    - Flutter
+  - cloud_firestore (2.5.4):
+    - Firebase/Firestore (= 8.8.0)
     - firebase_core
     - Flutter
-  - Firebase/Auth (6.33.0):
+  - Firebase/Auth (8.8.0):
     - Firebase/CoreOnly
-    - FirebaseAuth (~> 6.9.2)
-  - Firebase/CoreOnly (6.33.0):
-    - FirebaseCore (= 6.10.3)
-  - Firebase/Database (6.33.0):
+    - FirebaseAuth (~> 8.8.0)
+  - Firebase/CoreOnly (8.8.0):
+    - FirebaseCore (= 8.8.0)
+  - Firebase/Database (8.8.0):
     - Firebase/CoreOnly
-    - FirebaseDatabase (~> 6.6.0)
-  - Firebase/Firestore (6.33.0):
+    - FirebaseDatabase (~> 8.8.0)
+  - Firebase/Firestore (8.8.0):
     - Firebase/CoreOnly
-    - FirebaseFirestore (~> 1.18.0)
-  - firebase_auth (0.18.0-1):
-    - Firebase/Auth (~> 6.33.0)
-    - Firebase/CoreOnly (~> 6.33.0)
+    - FirebaseFirestore (~> 8.8.0)
+  - Firebase/Storage (8.8.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (~> 8.8.0)
+  - firebase_auth (3.1.4):
+    - Firebase/Auth (= 8.8.0)
     - firebase_core
     - Flutter
-  - firebase_core (0.5.2):
-    - Firebase/CoreOnly (~> 6.33.0)
+  - firebase_core (1.8.0):
+    - Firebase/CoreOnly (= 8.8.0)
     - Flutter
-  - firebase_database (4.3.0):
-    - Firebase/CoreOnly (~> 6.33.0)
-    - Firebase/Database (~> 6.33.0)
+  - firebase_database (6.1.2):
+    - Firebase/Database (= 8.8.0)
     - firebase_core
     - Flutter
-  - FirebaseAuth (6.9.2):
-    - FirebaseCore (~> 6.10)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseCore (6.10.3):
-    - FirebaseCoreDiagnostics (~> 1.6)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Logger (~> 6.7)
-  - FirebaseCoreDiagnostics (1.7.0):
-    - GoogleDataTransport (~> 7.4)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Logger (~> 6.7)
-    - nanopb (~> 1.30906.0)
-  - FirebaseDatabase (6.6.0):
-    - FirebaseCore (~> 6.10)
+  - firebase_storage (8.1.3):
+    - Firebase/Storage (= 8.8.0)
+    - firebase_core
+    - Flutter
+  - FirebaseAuth (8.8.0):
+    - FirebaseCore (~> 8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GTMSessionFetcher/Core (~> 1.5)
+  - FirebaseCore (8.8.0):
+    - FirebaseCoreDiagnostics (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/Logger (~> 7.4)
+  - FirebaseCoreDiagnostics (8.9.0):
+    - GoogleDataTransport (~> 9.1)
+    - GoogleUtilities/Environment (~> 7.6)
+    - GoogleUtilities/Logger (~> 7.6)
+    - nanopb (~> 2.30908.0)
+  - FirebaseDatabase (8.8.0):
+    - FirebaseCore (~> 8.0)
     - leveldb-library (~> 1.22)
-  - FirebaseFirestore (1.18.0):
+  - FirebaseFirestore (8.8.0):
     - abseil/algorithm (= 0.20200225.0)
     - abseil/base (= 0.20200225.0)
+    - abseil/container/flat_hash_map (= 0.20200225.0)
     - abseil/memory (= 0.20200225.0)
     - abseil/meta (= 0.20200225.0)
     - abseil/strings/strings (= 0.20200225.0)
     - abseil/time (= 0.20200225.0)
     - abseil/types (= 0.20200225.0)
-    - FirebaseCore (~> 6.10)
+    - FirebaseCore (~> 8.0)
     - "gRPC-C++ (~> 1.28.0)"
     - leveldb-library (~> 1.22)
-    - nanopb (~> 1.30906.0)
+    - nanopb (~> 2.30908.0)
+  - FirebaseStorage (8.8.0):
+    - FirebaseCore (~> 8.0)
+    - GTMSessionFetcher/Core (~> 1.5)
   - Flutter (1.0.0)
-  - GoogleDataTransport (7.5.1):
-    - nanopb (~> 1.30906.0)
-  - GoogleUtilities/AppDelegateSwizzler (6.7.2):
+  - flutter_barcode_scanner (2.0.0):
+    - Flutter
+  - GoogleDataTransport (9.1.2):
+    - GoogleUtilities/Environment (~> 7.2)
+    - nanopb (~> 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/AppDelegateSwizzler (7.6.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (6.7.2):
-    - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (6.7.2):
+  - GoogleUtilities/Environment (7.6.0):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.6.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/Network (6.7.2):
+  - GoogleUtilities/Network (7.6.0):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (6.7.2)"
-  - GoogleUtilities/Reachability (6.7.2):
+  - "GoogleUtilities/NSData+zlib (7.6.0)"
+  - GoogleUtilities/Reachability (7.6.0):
     - GoogleUtilities/Logger
   - "gRPC-C++ (1.28.2)":
     - "gRPC-C++/Implementation (= 1.28.2)"
@@ -318,21 +462,30 @@ PODS:
     - BoringSSL-GRPC (= 0.0.7)
     - gRPC-Core/Interface (= 1.28.2)
   - gRPC-Core/Interface (1.28.2)
-  - GTMSessionFetcher/Core (1.5.0)
-  - leveldb-library (1.22)
-  - nanopb (1.30906.0):
-    - nanopb/decode (= 1.30906.0)
-    - nanopb/encode (= 1.30906.0)
-  - nanopb/decode (1.30906.0)
-  - nanopb/encode (1.30906.0)
-  - PromisesObjC (1.2.11)
+  - GTMSessionFetcher/Core (1.7.0)
+  - leveldb-library (1.22.1)
+  - MTBBarcodeScanner (5.0.11)
+  - nanopb (2.30908.0):
+    - nanopb/decode (= 2.30908.0)
+    - nanopb/encode (= 2.30908.0)
+  - nanopb/decode (2.30908.0)
+  - nanopb/encode (2.30908.0)
+  - path_provider (0.0.1):
+    - Flutter
+  - PromisesObjC (2.0.0)
+  - SwiftProtobuf (1.18.0)
 
 DEPENDENCIES:
+  - barcode_scan2 (from `.symlinks/plugins/barcode_scan2/ios`)
+  - camera (from `.symlinks/plugins/camera/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
+  - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
+  - flutter_barcode_scanner (from `.symlinks/plugins/flutter_barcode_scanner/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
 
 SPEC REPOS:
   trunk:
@@ -344,16 +497,23 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseDatabase
     - FirebaseFirestore
+    - FirebaseStorage
     - GoogleDataTransport
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
     - GTMSessionFetcher
     - leveldb-library
+    - MTBBarcodeScanner
     - nanopb
     - PromisesObjC
+    - SwiftProtobuf
 
 EXTERNAL SOURCES:
+  barcode_scan2:
+    :path: ".symlinks/plugins/barcode_scan2/ios"
+  camera:
+    :path: ".symlinks/plugins/camera/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   firebase_auth:
@@ -362,32 +522,46 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_database:
     :path: ".symlinks/plugins/firebase_database/ios"
+  firebase_storage:
+    :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
+  flutter_barcode_scanner:
+    :path: ".symlinks/plugins/flutter_barcode_scanner/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
+  barcode_scan2: 0af2bb63c81b4565aab6cd78278e4c0fa136dbb0
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
-  cloud_firestore: fbbe16a4bc413246fa8d3b2ef5bc321c275ca7fe
-  Firebase: 8db6f2d1b2c5e2984efba4949a145875a8f65fe5
-  firebase_auth: a98b339f6b13591e0cee83e6807a078da68d9355
-  firebase_core: 350ba329d1641211bc6183a3236893cafdacfea7
-  firebase_database: bd51dc26c060f6e27a1326bc8c1ba283cd63c987
-  FirebaseAuth: c92d49ada7948d1a23466e3db17bc4c2039dddc3
-  FirebaseCore: d889d9e12535b7f36ac8bfbf1713a0836a3012cd
-  FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
-  FirebaseDatabase: 13a865a4b85897462b930eb683bda8f52583713f
-  FirebaseFirestore: adff4877869ca91a11250cc0989a6cd56bad163f
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
-  GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
+  camera: 3164201dc344383e62282964016528c4f5a9ad50
+  cloud_firestore: 814002a5be7dc955deaa18216ebe8c2e8be15d10
+  Firebase: 629510f1a9ddb235f3a7c5c8ceb23ba887f0f814
+  firebase_auth: 0b7168e2db1bff6e5b40a7dc268447b8dedb59c1
+  firebase_core: 3b4c707f5a8eff38f52fd5580895bcd89357bf42
+  firebase_database: b697c03db00895bbc2e27922fcf794454b2bac1d
+  firebase_storage: 092052b3fb85cca715f3d895b8bf5a209918fca5
+  FirebaseAuth: bcf0adeff88bda5dcb3beeabe5760f1226ab7b2f
+  FirebaseCore: 98b29e3828f0a53651c363937a7f7d92a19f1ba2
+  FirebaseCoreDiagnostics: 5daa63f1c1409d981a2d5007daa100b36eac6a34
+  FirebaseDatabase: bc4610ff3a816dcc680c1dbccf7f9f4bd94ac07d
+  FirebaseFirestore: 29baf05d5e7e0d5003eb34e5805d92b9858b36d4
+  FirebaseStorage: 54ff752ecbd27f1c354c3f5e8c55f6ad5783699b
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_barcode_scanner: 7a1144744c28dc0c57a8de7218ffe5ec59a9e4bf
+  GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
+  GoogleUtilities: 684ee790a24f73ebb2d1d966e9711c203f2a4237
   "gRPC-C++": 13d8ccef97d5c3c441b7e3c529ef28ebee86fad2
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
-  GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
-  leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
-  nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
-  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
+  GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
+  leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
+  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
+  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
+  SwiftProtobuf: c3c12645230d9b09c72267e0de89468c5543bd86
 
-PODFILE CHECKSUM: 255c98a435892803648f8ec5c537fe4c54e84de6
+PODFILE CHECKSUM: e708eab1b9d81ad0d9b677b912c01798a9bfa858
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.11.0

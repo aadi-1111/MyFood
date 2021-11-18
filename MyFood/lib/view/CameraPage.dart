@@ -5,14 +5,18 @@ import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 
-class CameraSetup{
-  static Future<void> runCamera(context) async{
+class CameraSetup {
+  static Future<void> runCamera(context) async {
     final cameras = await availableCameras();
     final firstCamera = cameras.first;
-    Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage(camera: firstCamera,)));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CameraPage(
+                  camera: firstCamera,
+                )));
   }
 }
-
 
 class CameraPage extends StatefulWidget {
   const CameraPage({Key? key, required this.camera}) : super(key: key);
@@ -27,7 +31,7 @@ class _CameraPageState extends State<CameraPage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   @override
-  void initState(){
+  void initState() {
     // TODO: implement initState
     super.initState();
     _controller = CameraController(widget.camera, ResolutionPreset.high);
@@ -44,22 +48,25 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Take a photo"),backgroundColor: Colors.orange,),
+      appBar: AppBar(
+        title: Text("Take a photo"),
+        backgroundColor: Colors.orange,
+      ),
       body: Stack(
         alignment: Alignment.center,
         fit: StackFit.expand,
         children: [
           FutureBuilder<void>(
               future: _initializeControllerFuture,
-              builder: (context,snapshot){
-                if(snapshot.connectionState == ConnectionState.done){
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
                   return CameraPreview(_controller);
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
-                else{
-                  return const Center(child: CircularProgressIndicator(),);
-                }
-              }
-          ),
+              }),
           Positioned(
             bottom: 10,
             child: Container(
@@ -71,15 +78,18 @@ class _CameraPageState extends State<CameraPage> {
                   // Take the Picture in a try / catch block. If anything goes wrong,
                   // catch the error.
                   try {
-                  // Ensure that the camera is initialized.
+                    // Ensure that the camera is initialized.
                     await _initializeControllerFuture;
                     // Attempt to take a picture and get the file `image`
                     // where it was saved.
                     final image = await _controller.takePicture();
                     // If the picture was taken, display it on a new screen.
                     await Navigator.of(context).push(
-                    MaterialPageRoute(
-                    builder: (context) => DisplayPictureScreen(imagePath: image.path),),);
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            DisplayPictureScreen(imagePath: image.path),
+                      ),
+                    );
                   } catch (e) {
                     // If an error occurs, log the error to the console.
                     print(e);
@@ -103,36 +113,39 @@ class DisplayPictureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+    firebase_storage.FirebaseStorage storage =
+        firebase_storage.FirebaseStorage.instance;
     return Scaffold(
-      appBar: AppBar(title: const Text('Photo Taken'), backgroundColor: Colors.orange,),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Image.file(
-            File(imagePath),
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-            alignment: Alignment.center,
-          ),
-          Positioned(
-            bottom: 10,
-            child: FloatingActionButton(
-              onPressed: () async {
-                await uploadFile(imagePath);
-                //bad code but gets the job done lol
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: const Icon(Icons.check),
+        appBar: AppBar(
+          title: const Text('Photo Taken'),
+          backgroundColor: Colors.orange,
+        ),
+        // The image is stored as a file on the device. Use the `Image.file`
+        // constructor with the given path to display the image.
+        body: Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.file(
+              File(imagePath),
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+              alignment: Alignment.center,
             ),
-          )
-        ],
-      )
-    );
+            Positioned(
+              bottom: 10,
+              child: FloatingActionButton(
+                onPressed: () async {
+                  await uploadFile(imagePath);
+                  //bad code but gets the job done lol
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: const Icon(Icons.check),
+              ),
+            )
+          ],
+        ));
   }
 }
 

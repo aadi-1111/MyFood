@@ -86,6 +86,7 @@ class _MainPageState extends State<MainPage> {
     double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       //This is the mint color for backgrounds
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xffe0f7f3),
 
       body: SafeArea(
@@ -98,14 +99,17 @@ class _MainPageState extends State<MainPage> {
                 IconButton(
                   icon: FutureBuilder(
                     future: getProfilePic(),
-                    builder: (context,snapshot){
-                      if(snapshot.hasData){
-                        if(snapshot.data == null){
-                          return CircleAvatar(maxRadius: 100,backgroundImage: AssetImage('assets/images/user.png'),);
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.data == null) {
+                          return Image.asset('assets/images/user.png');
                         }
-                        return CircleAvatar(maxRadius: 100,backgroundImage: NetworkImage(snapshot.data.toString()),);
-                      }
-                      else{
+                        return CircleAvatar(
+                          maxRadius: 100,
+                          backgroundImage:
+                              NetworkImage(snapshot.data.toString()),
+                        );
+                      } else {
                         return CircularProgressIndicator();
                       }
                     },
@@ -153,8 +157,8 @@ class _MainPageState extends State<MainPage> {
                     icon: Image.asset('assets/images/menu.png'),
                     iconSize: deviceHeight * .1,
                     onPressed: () {
-                      Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => Menu()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Menu()));
                     },
                   ),
                 ),
@@ -165,8 +169,10 @@ class _MainPageState extends State<MainPage> {
                     icon: Image.asset('assets/images/fridge.png'),
                     iconSize: deviceHeight * .1,
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => FridgePage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FridgePage()));
                     },
                   ),
                 ),
@@ -208,7 +214,8 @@ class _MainPageState extends State<MainPage> {
                   child: Text(
                     "Foods Expiring Soon",
                     style: TextStyle(
-                        fontSize: deviceWidth * .06, fontWeight: FontWeight.bold),
+                        fontSize: deviceWidth * .06,
+                        fontWeight: FontWeight.bold),
                   ),
                 )
               ],
@@ -233,7 +240,7 @@ class _MainPageState extends State<MainPage> {
                         );
                       } else {
                         List<DocumentSnapshot> data =
-                        snapshot.data as List<DocumentSnapshot>;
+                            snapshot.data as List<DocumentSnapshot>;
                         return ListView.builder(
                             itemCount: data.length,
                             itemBuilder: (_, index) {
@@ -244,7 +251,8 @@ class _MainPageState extends State<MainPage> {
                                         return AlertDialog(
                                           title: Text(data[index].get("Name")),
                                           content: SingleChildScrollView(
-                                              child: ListBody(children: <Widget>[
+                                              child:
+                                                  ListBody(children: <Widget>[
                                             TextField(
                                               controller: _amountController,
                                               decoration: InputDecoration(
@@ -266,14 +274,14 @@ class _MainPageState extends State<MainPage> {
                                             ),
                                           ])),
                                           actions: <Widget>[
-                                            Text(
-                                                data[index].get("ExpDate") == null
-                                                    ? 'No expiration date'
-                                                    : DateFormat('MM/dd/yyyy')
-                                                        .format(data[index]
-                                                            .get("ExpDate")
-                                                            .toDate())
-                                                        .toString()),
+                                            Text(data[index].get("ExpDate") ==
+                                                    null
+                                                ? 'No expiration date'
+                                                : DateFormat('MM/dd/yyyy')
+                                                    .format(data[index]
+                                                        .get("ExpDate")
+                                                        .toDate())
+                                                    .toString()),
 
                                             //Submit Button
                                             InkWell(
@@ -289,7 +297,8 @@ class _MainPageState extends State<MainPage> {
                                                     color: Colors.green[300],
                                                     borderRadius:
                                                         BorderRadius.all(
-                                                            Radius.circular(10)),
+                                                            Radius.circular(
+                                                                10)),
                                                   ),
                                                   child: Center(
                                                     child: Text(
@@ -375,4 +384,3 @@ Future<String> getProfilePic() async {
   // Within your widgets:
   // Image.network(downloadURL);
 }
-

@@ -49,10 +49,10 @@ class _MeatPageState extends State<MeatPage> {
           .collection("Drawer")
           .doc(name)
           .set({
-        "Name": name,
-        "Type": "Meat",
         "Amount": amount,
-        "ExpDate": expdate
+        "ExpDate": expdate,
+        "Name": name,
+        "Type": "Meat"
       });
     });
   }

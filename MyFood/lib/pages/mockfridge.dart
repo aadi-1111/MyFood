@@ -30,10 +30,9 @@ class _AddRemoveListViewState extends State<AddRemoveListView> {
               hintText: 'enter text to add',
             ),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: _onSubmit,
             child: Text('Add to List'),
-            color: Colors.red,
           ),
           SizedBox(height: 20.0),
           Expanded(

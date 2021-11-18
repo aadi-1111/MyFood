@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:myfood/theme/approutes.dart';
 
 import './Register.dart';
 import './ForgotPassword.dart';
@@ -61,7 +60,7 @@ class LoginState extends State<LoginScreen> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 'Understood',
                 style: TextStyle(
@@ -180,31 +179,33 @@ class LoginState extends State<LoginScreen> {
                         onPressed: () async {
                           await Firebase.initializeApp();
                           try {
-                            UserCredential user = await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                    email: userController.text,
-                                    password: passwordController.text);
                             //final uid = user.user.uid;
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainPage()), (e) => false);
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage()),
+                                (e) => false);
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'user-not-found') {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                 content: Text("User not Found"),
                               ));
                               print('No user found for that email.');
                             } else if (e.code == 'wrong-password') {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("Wrong password provided for that user."),
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                    "Wrong password provided for that user."),
                               ));
-                            }
-                            else{
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                 content: Text("Error"),
                               ));
                             }
                           }
                         },
-
                         child: Center(
                           child: Text('Log In',
                               style: TextStyle(
@@ -221,9 +222,9 @@ class LoginState extends State<LoginScreen> {
                   ),
                   Container(
                     height: 30,
-                    width: 155,
-                    child: FlatButton(
-                      onPressed: () {
+                    width: 160,
+                    child: InkWell(
+                      onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -245,8 +246,8 @@ class LoginState extends State<LoginScreen> {
                   Container(
                     height: 30,
                     width: 90,
-                    child: FlatButton(
-                      onPressed: () {
+                    child: InkWell(
+                      onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(

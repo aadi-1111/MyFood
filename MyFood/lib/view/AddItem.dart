@@ -64,7 +64,10 @@ class AddItemState extends State<AddItem> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
               child: Text(
                 'Understood',
                 style: TextStyle(
@@ -73,10 +76,7 @@ class AddItemState extends State<AddItem> {
                   color: Colors.orange[700],
                 ),
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
+            )
           ],
         );
       },
@@ -198,12 +198,11 @@ class AddItemState extends State<AddItem> {
                     width: 164,
                     child: Material(
                       borderRadius: BorderRadius.circular(5),
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           submit(itemNameController.text, dateController.text,
                               quantityController.text);
                         },
-                        color: Colors.orange[700],
                         child: Center(
                           child: Text('Add Item',
                               style: TextStyle(
