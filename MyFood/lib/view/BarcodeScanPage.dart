@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/services.dart';
-import 'dart:io' show Platform;
-
 import 'package:openfoodfacts/openfoodfacts.dart';
 
 class BarcodeScanPage extends StatefulWidget {
@@ -103,6 +101,11 @@ class BarcodeScanPageState extends State<BarcodeScanPage> {
                   ListTile(
                     title: Text("Barcode"),
                     subtitle: Text(scanResult.rawContent),
+                  ),
+                  ListTile(
+                    title: Text("Product"),
+                    subtitle: Text(result.productNameInLanguages![
+                        OpenFoodFactsLanguage.ENGLISH]!),
                   ),
                   ListTile(
                       title: Text("Indgedients"), subtitle: Text(ingredients))
